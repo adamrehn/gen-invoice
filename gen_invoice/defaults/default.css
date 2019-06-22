@@ -1,0 +1,74 @@
+* {
+	box-sizing: border-box;
+}
+
+body
+{
+	padding: 2rem;
+	margin: 0;
+}
+
+h1, h2, p {
+	margin: 0;
+}
+
+h1 + h2, h2 + p, p + p {
+	padding-top: 0.5rem;
+}
+
+.label {
+	font-weight: bold;
+}
+
+.grid
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	row-gap: 2rem;
+}
+
+section.payee-details, section.payment-details {
+	text-align: right;
+}
+
+section.payer-details, section.payment-details
+{
+	border: 1px solid #000;
+	padding: 1rem;
+}
+
+section.payer-details {
+	margin-right: 0.5rem;
+}
+
+section.payment-details {
+	margin-left: 0.5rem;
+}
+
+section.purchase-order-details, section.items
+{
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+table {
+	width: 100%;
+}
+
+table, table th, table td
+{
+	border-collapse: collapse;
+	border: 1px solid #000;
+}
+
+table th, table td {
+	padding: 0.5rem;
+}
+
+table tr.section-description th {
+	text-align: left;
+}
+
+table thead tr, table tr.section-description, table tr.subtotal, table tr.tax, table tr.total {
+	background-color: #ccc;
+}

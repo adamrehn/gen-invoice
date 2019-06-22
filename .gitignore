@@ -1,0 +1,6 @@
+gen_invoice/__pycache__
+.vscode
+build
+dist
+*.egg-info
+*.pyc

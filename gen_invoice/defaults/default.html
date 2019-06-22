@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{% if invoice == true %}Invoice{% else %}Quote{% endif %} {{ number }}</title>
+		<style type="text/css">
+			{{ css }}
+		</style>
+	</head>
+	
+	<body>
+		
+		<!-- Use CSS grid layout attributes to position and reorder page sections however you like -->
+		<main class="grid">
+			
+			<!-- Invoice/quote metadata (issuing business, invoice/quote number, date, purchase order reference) -->
+			<section class="invoice-meta">
+				
+				<h1 class="business-name">{{ payee.name }}</h1>
+				<h2 class="metadata">{% if invoice == true %}Invoice{% else %}Quote{% endif %} #{{ number }}</h2>
+				
+				<p class="date"><span class="label">Date:</span> {{ date }}</p>
+				
+				{% if invoice == true and purchase_order %}
+				<p class="purchase-order"><span class="label">Purchase order:</span> {{ purchase_order }}</p>
+				{% endif %}
+				
+			</section>
+			
+			<!-- Payee details -->
+			<section class="payee-details">
+				
+				{% for line in payee.address %}
+				<p class="address-line">{{ line }}</p>
+				{% endfor %}
+				
+				{% if payee.identifier %}
+				<p class="identifier"><span class="label">Identifier (ABN/VAT number/etc.):</span> {{ payee.identifier }}</p>
+				{% endif %}
+				
+				{% if payee.email %}
+				<p class="email"><span class="label">Email:</span> {{ payee.email }}</p>
+				{% endif %}
+				
+				{% if payee.phone %}
+				<p class="phone"><span class="label">Phone:</span> {{ payee.phone }}</p>
+				{% endif %}
+				
+				{% if payee.fax %}
+				<p class="fax"><span class="label">Fax:</span> {{ payee.fax }}</p>
+				{% endif %}
+				
+			</section>
+			
+			<!-- Payer details -->
+			<section class="payer-details">
+				
+				<p class="label">Billed to:</p>
+				<p class="payer-name">{{ payer.name }}</p>
+				
+				{% for line in payer.address %}
+				<p class="address-line">{{ line }}</p>
+				{% endfor %}
+				
+			</section>
+			
+			<!-- Payment details -->
+			<section class="payment-details">
+				
+				{% if invoice == true %}
+					
+					<!-- Details that only apply to invoices -->
+					<p class="label">Pay to:</p>
+					
+					{# We support payment details in the form of both bank accounts and online payment links #}
+					{% if payee.bank %}
+						
+						<!-- Bank account details -->
+						<p><span class="label">Name:</span> {{ payee.bank.holder }}</p>
+						<p><span class="label">Bank:</span> {{ payee.bank.bank }}</p>
+						{% if international == true %}<p><span class="label">SWIFT Code:</span> {{ payee.bank.swift }}</p>{% endif %}
+						<p><span class="label">Bank code (BSB/sort code/etc.):</span> {{ payee.bank.code }}</p>
+						<p><span class="label">Account Number:</span> {{ payee.bank.account }}</p>
+						
+					{% elif payee.online %}
+						
+						<!-- Online payment details -->
+						<p><span class="label">Name:</span> {{ payee.online.name }}</p>
+						<p><span class="label">Payment Link:</span> {{ payee.online.link }}</p>
+						
+					{% endif %}
+					
+					<p class="due"><span class="label">Balance due:</span> {{ payer.due }}</p>
+					
+				{% else %}
+					
+					<!-- Details that only apply to quotes -->
+					<p class="label">Quote valid until:</p>
+					<p class="expiry">{{ expiry }}</p>
+					
+				{% endif %}
+				
+			</section>
+			
+			<!-- Line items -->
+			<section class="items">
+				<table>
+					
+					<thead>
+						<tr><th>Item Description</th><th>Quantity</th><th>Unit Price</th><th>Total</th></tr>
+					</thead>
+					
+					{% for section in sections %}
+					<tbody class="section">
+						
+						{% if section.description != "" %}
+						<tr class="section-description"><th colspan="4">{{ section.description }}</th></tr>
+						{% endif %}
+						
+						{% for line in section.lines %}
+						<tr class="line-item">
+							<td class="description">{{ line.description }}</td>
+							<td class="quantity">{{ line.quantity }}{% if line.units != "" %} {{ line.units }}{% endif %}</td>
+							<td class="price">{{ line.price | currency }}</td>
+							<td class="total">{{ line.total | currency }}</td>
+						</tr>
+						{% endfor %}
+						
+						<tr class="subtotal"><td colspan="3">Subtotal</td><td>{{ section.total | currency }}</td></tr>
+						
+					</tbody>
+					{% endfor %}
+					
+					<tbody class="overall">
+						
+						{% if tax > 0.0 %}
+						<tr class="tax"><td colspan="3">Tax (GST/VAT/sales tax/etc.)</td><td>{{ tax | currency }}</td></tr>
+						{% endif %}
+						
+						<tr class="total"><td colspan="3">Total</td><td>{{ total | currency }}</td></tr>
+						
+					</tbody>
+				</table>
+			</section>
+			
+		</main>
+		
+	</body>
+</html>
