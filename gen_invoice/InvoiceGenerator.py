@@ -116,8 +116,7 @@ class InvoiceGenerator(object):
 				['electron-pdf', '--version'],
 				stdout=subprocess.PIPE,
 				stderr=subprocess.PIPE,
-				check=True,
-				shell=True
+				check=True
 			)
 			
 			# Verify that the version meets our minimum requirement
@@ -143,8 +142,7 @@ class InvoiceGenerator(object):
 				'--marginsType=0',
 				'--waitForJSEvent', 'did-finish-load'
 			],
-			check=True,
-			shell=True
+			check=True
 		)
 		
 		# Verify that the PDF file was generated successfully
