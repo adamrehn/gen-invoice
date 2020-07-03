@@ -4,6 +4,11 @@ from dateutil.relativedelta import relativedelta
 from pkg_resources import parse_version
 from .Utility import Utility
 
+
+# The minimum version of electron-pdf that we require in order to generate PDF files
+ELECTRON_PDF_MIN_VERSION = '4.0.6'
+
+
 class InvoiceGenerator(object):
 	'''
 	Provides functionality for generating HTML and PDF files for invoices/quotes.
@@ -108,25 +113,25 @@ class InvoiceGenerator(object):
 		Renders an invoice/quote HTML file to a PDF using electron-pdf.
 		'''
 		
-		# Verify that electron-pdf 4.0.6 or newer is available
+		# Determine whether a compatible version electron-pdf is installed or if we need to force the version number
+		versionOverride = ''
 		try:
 			
 			# Attempt to retrieve the version string from electron-pdf
 			output = subprocess.run(
-				['electron-pdf', '--version'],
+				['npx', 'electron-pdf', '--version'],
 				stdout=subprocess.PIPE,
-				stderr=subprocess.PIPE,
 				check=True,
 				shell=True
 			)
 			
 			# Verify that the version meets our minimum requirement
 			version = parse_version(output.stdout.decode('utf-8').strip())
-			if version < parse_version('4.0.6'):
+			if version < parse_version(ELECTRON_PDF_MIN_VERSION):
 				raise RuntimeError('')
 			
 		except:
-			return False
+			versionOverride = '@{}'.format(ELECTRON_PDF_MIN_VERSION)
 		
 		# Remove the PDF file if it already exists
 		if os.path.exists(pdf):
@@ -135,7 +140,8 @@ class InvoiceGenerator(object):
 		# Generate the PDF file
 		subprocess.run(
 			[
-				'electron-pdf',
+				'npx',
+				'electron-pdf{}'.format(versionOverride),
 				'file:///' + html.replace('\\', '/'),
 				pdf.replace('\\', '/'),
 				'--printBackground',
