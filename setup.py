@@ -28,7 +28,7 @@ setup(
 	python_requires = '>=3.5',
 	install_requires = [
 		'appdirs>=1.4.3',
-		'humanfriendly>=4.18',
+		'humanfriendly>=8.2',
 		'Jinja2>=2.10.1',
 		'python-dateutil>=2.8.0',
 		'PyYAML>=5.1.1',

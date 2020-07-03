@@ -1,4 +1,5 @@
-import humanfriendly, os
+from humanfriendly import prompts
+import os
 
 class Utility(object):
 	'''
@@ -10,7 +11,7 @@ class Utility(object):
 		'''
 		Prompts the user to overwrite an existing output file
 		'''
-		return humanfriendly.prompts.prompt_for_confirmation(
+		return prompts.prompt_for_confirmation(
 			'Output file {} already exists, overwrite?'.format(filename),
 			padding=False
 		)
