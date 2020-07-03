@@ -7,7 +7,7 @@ with open(abspath(join(dirname(__file__), 'README.md')), 'rb') as readmeFile:
 
 setup(
 	name='gen-invoice',
-	version='0.0.1',
+	version='0.0.2',
 	description='Template-based invoice generator',
 	long_description=__readme__,
 	long_description_content_type='text/markdown',
