@@ -1,4 +1,4 @@
-import collections, csv, datetime, json, locale, os, shutil, subprocess, yaml
+import collections, csv, datetime, json, locale, os, platform, shutil, subprocess, yaml
 from jinja2 import Environment, FileSystemLoader, Template
 from dateutil.relativedelta import relativedelta
 from pkg_resources import parse_version
@@ -113,6 +113,9 @@ class InvoiceGenerator(object):
 		Renders an invoice/quote HTML file to a PDF using electron-pdf.
 		'''
 		
+		# Use the system shell to run commands under Windows
+		useShell = platform.system().lower() == 'windows'
+		
 		# Determine whether a compatible version electron-pdf is installed or if we need to force the version number
 		versionOverride = ''
 		try:
@@ -122,7 +125,7 @@ class InvoiceGenerator(object):
 				['npx', 'electron-pdf', '--version'],
 				stdout=subprocess.PIPE,
 				check=True,
-				shell=True
+				shell=useShell
 			)
 			
 			# Verify that the version meets our minimum requirement
@@ -150,7 +153,7 @@ class InvoiceGenerator(object):
 				'--waitForJSEvent', 'did-finish-load'
 			],
 			check=True,
-			shell=True
+			shell=useShell
 		)
 		
 		# Verify that the PDF file was generated successfully
