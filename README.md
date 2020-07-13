@@ -3,11 +3,11 @@ Template-based invoice generator
 
 This package provides flexible, modular invoice generation functionality based on the [Jinja template engine](http://jinja.pocoo.org/), with PDF generation provided by [electron-pdf](https://www.npmjs.com/package/electron-pdf) when available.
 
-**Check out the [comprehensive documentation](https://adamrehn.com/docs/gen-invoice/) to view installation and usage instructions.**
+**Check out the [comprehensive documentation](https://docs.adamrehn.com/gen-invoice/) to view installation and usage instructions.**
 
 Resources:
 
-- **Documentation:** <https://adamrehn.com/docs/gen-invoice/>
+- **Documentation:** <https://docs.adamrehn.com/gen-invoice/>
 - **GitHub repository:** <https://github.com/adamrehn/gen-invoice>
 - **Package on PyPI:** <https://pypi.org/project/gen-invoice/>
 
