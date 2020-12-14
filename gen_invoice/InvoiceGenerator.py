@@ -1,4 +1,4 @@
-import collections, csv, datetime, json, locale, os, platform, shutil, subprocess, yaml
+import collections, csv, datetime, json, locale, os, platform, shutil, subprocess, tempfile, yaml
 from jinja2 import Environment, FileSystemLoader, Template
 from dateutil.relativedelta import relativedelta
 from pkg_resources import parse_version
@@ -19,6 +19,15 @@ class InvoiceGenerator(object):
 		Creates a new generator.
 		'''
 		pass
+	
+	def generate_string(self, number, items, payee, payer, template, stylesheet, tax=0.0, is_international=False, is_quote=False, expiry=None, purchase_order=None, context_overrides=None):
+		'''
+		Generates the HTML for an invoice/quote with the specified options and returns it.
+		'''
+		with tempfile.TemporaryDirectory() as tempDir:
+			outfile = os.path.join(tempDir, 'output.html')
+			self.generate(outfile, number, items, payee, payer, template, stylesheet, tax, is_international, is_quote, expiry, purchase_order, context_overrides)
+			return Utility.read_file(outfile)
 	
 	def generate(self, outfile, number, items, payee, payer, template, stylesheet, tax=0.0, is_international=False, is_quote=False, expiry=None, purchase_order=None, context_overrides=None):
 		'''
